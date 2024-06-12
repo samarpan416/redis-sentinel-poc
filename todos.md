@@ -1,0 +1,2 @@
+- App should make db call in case redis conn not made
+- Determine the time for unavailibility in case of master going down
