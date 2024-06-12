@@ -6,8 +6,6 @@ networks:
     ipam:
       config:
         - subnet: 192.168.81.0/24
-        # - subnet: 192.168.1.0/24
-          # gateway: 192.168.1.1
 
 services:
   redis_master:
@@ -17,20 +15,11 @@ services:
       - "6379:6379"
     volumes:
       - ./master/conf:/usr/local/etc/redis
-      # - ./master/data:/data
-      - ./master/entrypoint.sh:/entrypoint.sh
+      - ./master/data:/data
     command: redis-server /usr/local/etc/redis/redis.conf
-    # environment:
-    #   - REDIS_PORT=6379
-    # entrypoint: ["/entrypoint.sh"]
-    # restart: always
-    # network_mode: "host"
-    # networks:
-    #   - redis_net
     networks:
       redis_net:
         ipv4_address: 192.168.81.10
-        # ipv4_address: 192.168.1.10
 
   redis_slave_1:
     image: redis
@@ -39,16 +28,8 @@ services:
       - "6380:6380"
     volumes:
       - ./slave/conf:/usr/local/etc/redis
-      # - ./slave/data:/data
-      - ./slave/entrypoint.sh:/entrypoint.sh
+      - ./slave/data:/data
     command: redis-server /usr/local/etc/redis/redis-1.conf
-    # environment:
-    #   - REDIS_PORT=6380
-    # entrypoint: ["/entrypoint.sh"]
-    # restart: always
-    # network_mode: "host"
-    # networks:
-    #   - redis_net
     networks:
       redis_net:
         ipv4_address: 192.168.81.11
@@ -60,16 +41,8 @@ services:
       - "6381:6381"
     volumes:
       - ./slave/conf:/usr/local/etc/redis
-      # - ./slave/data:/data
-      - ./slave/entrypoint.sh:/entrypoint.sh
+      - ./slave/data:/data
     command: redis-server /usr/local/etc/redis/redis-2.conf
-    # environment:
-    #   - REDIS_PORT=6381
-    # entrypoint: ["/entrypoint.sh"]
-    # restart: always
-    # network_mode: "host"
-    # networks:
-    #   - redis_net
     networks:
       redis_net:
         ipv4_address: 192.168.81.12
@@ -78,7 +51,6 @@ services:
     image: bitnami/redis-sentinel:latest
     container_name: redis_sentinel_1
     environment:
-      # - REDIS_MASTER_HOST=192.168.65.1
       - REDIS_MASTER_HOST=192.168.81.10
       - REDIS_MASTER_PORT_NUMBER=6379
       - REDIS_MASTER_SET=redis_master
@@ -90,10 +62,6 @@ services:
       - redis_master
       - redis_slave_1
       - redis_slave_2
-    # restart: always
-    # network_mode: "host"
-    # networks:
-    #   - redis_net
     networks:
       redis_net:
         ipv4_address: 192.168.81.13
@@ -102,7 +70,6 @@ services:
     image: bitnami/redis-sentinel:latest
     container_name: redis_sentinel_2
     environment:
-      # - REDIS_MASTER_HOST=192.168.65.1
       - REDIS_MASTER_HOST=192.168.81.10
       - REDIS_MASTER_PORT_NUMBER=6379
       - REDIS_MASTER_SET=redis_master
@@ -114,10 +81,6 @@ services:
       - redis_master
       - redis_slave_1
       - redis_slave_2
-    # restart: always
-    # network_mode: "host"
-    # networks:
-    #   - redis_net
     networks:
       redis_net:
         ipv4_address: 192.168.81.14
@@ -126,7 +89,6 @@ services:
     image: bitnami/redis-sentinel:latest
     container_name: redis_sentinel_3
     environment:
-      # - REDIS_MASTER_HOST=192.168.65.1
       - REDIS_MASTER_HOST=192.168.81.10
       - REDIS_MASTER_PORT_NUMBER=6379
       - REDIS_MASTER_SET=redis_master
@@ -138,10 +100,6 @@ services:
       - redis_master
       - redis_slave_1
       - redis_slave_2
-    # restart: always
-    # network_mode: "host"
-    # networks:
-    #   - redis_net
     networks:
       redis_net:
         ipv4_address: 192.168.81.15
